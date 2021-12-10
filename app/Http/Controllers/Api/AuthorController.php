@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Author;
 use Illuminate\Http\Request;
 
+
 class AuthorController extends Controller
 {
    // REGISTER METOD -POST
@@ -32,12 +33,35 @@ class AuthorController extends Controller
       return response() -> json([
          'status' => 1,
          'message' => 'Author created successfully'
-      ]);
+      ]); 
 
    }
 
    //LOGIN MEHTOD -POST
    public function login(Request $request) {
+      // validation
+      $login_data = $request -> validate([
+         'email' => 'required',
+         'password' => 'required'
+      ]);
+
+      //validate author data
+      if(!auth()->attempt($login_data)) {
+         return response()->json([
+            'status' => false,
+            'message' => 'Invalid Credentials'
+         ], 401);
+      }
+
+      //token
+      $token = auth()->user()->createToken('auth_token')->accessToken;
+
+      //send response
+      return response()->json([
+         'status' => true,
+         'message' => 'Author logged in successfully',
+         'access_token' => $token
+      ]);
 
    }
 
