@@ -12,4 +12,11 @@ class Author extends Model
     use HasFactory, HasApiTokens;
 
     public $timestamps = false; 
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'phone_no'
+    ];
 }
