@@ -23,7 +23,7 @@ Route::post('login', [AuthorController::class, 'login']);
 Route::group(['middleware' => ['auth:api']], function() {
 
     Route::get('profile', [AuthorController::class, 'profile']);
-    Route::get('logout', [AuthorController::class, 'logout']);
+    Route::post('logout', [AuthorController::class, 'logout']);
 
     Route::post('create/book', [BookController::class, 'createBook']);
     Route::get('list/books', [BookController::class, 'listBooks']);

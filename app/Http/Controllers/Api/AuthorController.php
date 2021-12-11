@@ -78,7 +78,13 @@ class AuthorController extends Controller
    }
 
    //LOGOUT METHOD -GET
-   public function logout() {
-       
+   public function logout(Request $request) {
+      $token = $request->user()->token();
+
+      $token->revoke();
+      return response()->json([
+         'status' => true,
+         'message' => 'Author logged out successfully'
+      ]);
    }
 }
