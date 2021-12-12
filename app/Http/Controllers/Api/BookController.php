@@ -86,6 +86,33 @@ class BookController extends Controller
 
     // UPDATE METHOD -POST 
     public function updateBook(Request $request, $book_id) {
+        $author_id = auth()->user()->id;
+
+        if(Book::where([
+            'author_id' => $author_id,
+            'id' => $book_id
+        ])->exists()){
+
+            $book = Book::find($book_id);
+
+            $book->title = isset($request->title)? $request->title : $book->title;
+            $book->description = isset($request->description)? $request->description : $book->description;
+            $book->book_cost = isset($request->book_cost)? $request->title : $book->book_cost;
+
+            $book->save();
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Book data has been updated'
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' =>'Author Book does not exist'
+            ]);
+
+        }
 
     }
 
