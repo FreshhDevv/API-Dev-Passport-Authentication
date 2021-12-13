@@ -67,6 +67,8 @@ class BookController extends Controller
             'author_id' => $author_id,
             'id' => $book_id
         ]) -> exists()){
+
+
             $book = Book::find($book_id);
 
             return response()->json([
@@ -95,6 +97,8 @@ class BookController extends Controller
 
             $book = Book::find($book_id);
 
+            //print_r($request->all());die;
+
             $book->title = isset($request->title)? $request->title : $book->title;
             $book->description = isset($request->description)? $request->description : $book->description;
             $book->book_cost = isset($request->book_cost)? $request->title : $book->book_cost;
@@ -118,6 +122,28 @@ class BookController extends Controller
 
     // DELETE METHOD -GET
     public function deleteBook($book_id) {
+
+        $author_id = auth()->user()->id;
+
+        if(Book::where([
+            'author_id' => $author_id,
+            'id' => $book_id
+        ])->exists()){
+
+            $book = Book::find($book_id);
+            $book->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Book has been deleted'
+            ]);
+
+        }else {
+            return response()->json([
+                'status' => false,
+                'message' =>'Author Book does not exist'
+            ]);
+        }
         
     }
 }
